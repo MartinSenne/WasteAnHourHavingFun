@@ -12,7 +12,8 @@ case object A extends PlayerDef with RoundResult
 case object B extends PlayerDef with RoundResult
 case object Draw extends RoundResult
 
-case class GameStatus(playerA: Player, playerB: Player, currentStep : Option[Int], completedMoves: Seq[CompletedRound] )
+/** Current status of a game. Includes number of round to be played and completed rounds. */
+case class GameStatus(playerA: Player, playerB: Player, currentStep : Option[Int], completedRounds: Seq[CompletedRound] )
 
 case class CompletedRound(a: Int, b:Int, result: RoundResult)
 

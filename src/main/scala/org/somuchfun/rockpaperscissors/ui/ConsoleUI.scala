@@ -35,8 +35,8 @@ class ConsoleUI(val game: Game) {
   }
   
   private def finalScoreAndWinner( gameStatus: GameStatus) = {
-    val scoreA = gameStatus.completedMoves.filter( cm ⇒ cm.result.equals(A) ).size
-    val scoreB = gameStatus.completedMoves.filter( cm ⇒ cm.result.equals(B) ).size
+    val scoreA = gameStatus.completedRounds.filter(cm ⇒ cm.result.equals(A) ).size
+    val scoreB = gameStatus.completedRounds.filter(cm ⇒ cm.result.equals(B) ).size
     val winner = if (scoreA > scoreB) A else {if (scoreB > scoreA) B else Draw}
     val s = winner match {
       case A ⇒ s"Winner is ${gameStatus.playerA.name}."
@@ -51,7 +51,7 @@ class ConsoleUI(val game: Game) {
     println(s"${withLength(20, gameStatus.playerA.name)} ${withLength(20, gameStatus.playerB.name)} Score")
     println( "-----------------------------------------------")
 
-    gameStatus.completedMoves.foreach( round ⇒ {
+    gameStatus.completedRounds.foreach(round ⇒ {
       println(s"${withLength(20,symbol(round.a))} ${withLength(20, symbol(round.b))} ${score(round.result)}")
     })
     if (gameStatus.currentStep.equals(None)) {
