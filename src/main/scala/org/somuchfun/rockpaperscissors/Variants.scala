@@ -1,11 +1,14 @@
 package org.somuchfun.rockpaperscissors
 
+/**
+  * Game variant describes properties of 
+  * <b>balanced modulo games</b>.
+  */
 trait GameVariant {
   def n : Int
   def elements: Map[Int, String]
 
-  def beats(a: Int, b: Int) : Winning = {
-    // balanced modulo games
+  def beats(a: Int, b: Int) : RoundResult = {
     val rest = (b - a) % n
     val positiveRestMod2 = (if (rest < 0) rest+n else rest) % 2
     val r = ( b-a, positiveRestMod2 )

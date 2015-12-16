@@ -1,30 +1,58 @@
 package org.somuchfun.rockpaperscissors.players
 
+import org.somuchfun.rockpaperscissors.ui.ConsoleUI
 import org.somuchfun.rockpaperscissors.{PlayerDef, Game}
 
-import scala.io.StdIn
-import scala.util.Random
+import scala.util.Try
 
 trait Player {
+  
   def name: String
-  def triggerMove(game: Game, step: Int)
+  
+  def playerDef: PlayerDef
+
+  /**
+    * 
+    * @param game
+    */
+  def triggerMove(game: Game): Unit = {
+    val gameStat = game.gameStatus
+    gameStat.currentStep match {
+      case Some(step) ⇒ {
+        val choice = nextChoice( game )
+        game.submitMove(playerDef, step, choice)
+      }
+      case None ⇒ {
+        throw new RuntimeException("Game is already finished. Trigger should never be called in that case.")
+      }  
+    }
+  }
+  
+  /** Determine next move. */
+  def nextChoice(game: Game): Int
 }
 
-class HumanPlayer(val name: String, playerDef: PlayerDef) extends Player {
-  override def triggerMove(game: Game, step: Int): Unit = {
-    print("Your move: ")
-    val choice = StdIn.readLine().toInt
-    game.submitMove(playerDef, step, choice)
+/**
+  * A human player.
+  * @param name is player's name
+  * @param playerDef is the role (either player A or player B)
+  */
+class HumanPlayer(val name: String, val playerDef: PlayerDef) extends Player {
+  override def nextChoice(game: Game): Int = {
+    
+    ConsoleUI.userChoiceForMove(game)
   }
 }
 
-class ComputerPlayer(playerDef: PlayerDef ) extends Player {
+class ComputerPlayer(nameAdd: String, val playerDef: PlayerDef) extends Player {
+  import scala.util.Random
+  
   val rnd = new Random()
-  val name = "Computer"
+  val name = "Computer " + nameAdd
 
-  override def triggerMove(game: Game, step: Int): Unit = {
+  override def nextChoice(game: Game): Int = {
     Thread.sleep(500)
-    val choice = rnd.nextInt( game.variant.n ) + 1
-    game.submitMove(playerDef, step, choice)
+    val choice = rnd.nextInt(game.variant.n) + 1
+    choice
   }
 }
