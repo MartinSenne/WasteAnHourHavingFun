@@ -61,7 +61,6 @@ As time is not unlimited, the following deficiencies exist
     * Use an actor (and the Akka actor framework) to have the game actor encapsulate its mutable state
     * Use a state monad instead
     
-## License
 
 
   
