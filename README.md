@@ -49,7 +49,7 @@ For details on input see below in section (guide).
 * The current implementation runs and 
   * supports different play-modes (computer vs. computer, human vs. computer, human vs. human),
   * obeys the rules of paper-scissors stone and
-  * does not allow for a "draw" match, so a match is continued as long as `n` round that are not "draw" have been played. 
+  * does not allow for a "draw" match, such that a match is continued as long as `n` rounds, none of themn "draw", have been played. 
   
 
 ### Extensibility
@@ -57,23 +57,23 @@ For details on input see below in section (guide).
 * Easy extensibility towards any modulo-based balanced game with an unequal number of weapons. (e.g. rock-paper-scissors-lizard-Spock).  
 See (wiki article)[https://en.wikipedia.org/wiki/Rock-paper-scissors#Additional_weapons] for details.
 * Easy extensibility towards a real "Client-Server"-based architecture, as `Game` (reflecting the backend)
-can be easily adopted to be used from a frontend. In order to do so, wrap parameters for call to `Game.submitMove` and 
-result `GameStatus` into appropriate JSON objects. 
+can be easily adopted to be used from a frontend. In order to do so, wrap parameters for calls to `Game.submitMove` and 
+its result `GameStatus` into appropriate JSON objects. 
 
 ### Current Deficiencies
 
-As time is not unlimited, the following deficiencies exist
+Currently, the following deficiencies exist:
 
 * Test-wise
   * Test coverage can be improved. Especially the following tests are missing:
     * Test that the final score is correct.  
-    * Tests that proof correct behaviour of ConsoleUI.
+    * Tests that proof the correct behaviour of ConsoleUI.
 * Code-wise
-  * Nested `if-else` structure in `GameImpl.submitMove` is ugly. This can be easily resolved by turning if statement
-   into methods return `Try` and then using for-comprehension to combine the `Try`-monad.
-  * `var state` in `Game` is ugly. Two possible approaches to improve that situation
+  * Nested `if-else` structure in `GameImpl.submitMove` is ugly. This can be easily resolved by turning `if`-statements
+   into methods that return `Try`. The `Try`s from these method invocations can then easily be combined via a for-comprehension as `Try` is a monad.
+  * Having `var state` in `Game` is ugly. Two possible approaches to improve that situation
     * Use an actor (and the Akka actor framework) to have the game actor encapsulate its mutable state
-    * Use a state monad instead
+    * Use a state monad
     
 
 ## Guide
