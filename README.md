@@ -24,14 +24,30 @@ then from with sbt shell execute
 
 ```
 run
-``` 
+```
+ 
+### Execute tests
+ 
+ Start sbt from console via
+ 
+ ```
+ sbt
+ ```
+ 
+ then from with sbt shell execute
+ 
+ ```
+ test
+ ``` 
+ 
+ to run all tests.
 
 ## Status
 
 * The current implementation runs and 
   * supports different play-modes (computer vs. computer, human vs. computer, human vs. human),
   * obeys the rules of paper-scissors stone and
-  * does not allow for a "draw" match, so if a match is continued as long as `n` round that are not "draw" have been played. 
+  * does not allow for a "draw" match, so a match is continued as long as `n` round that are not "draw" have been played. 
   
 
 ### Extensibility
@@ -39,7 +55,7 @@ run
 * Easy extensibility towards any modulo-based balanced game with an unequal number of weapons. (e.g. rock-paper-scissors-lizard-Spock).  
 See (wiki article)[https://en.wikipedia.org/wiki/Rock-paper-scissors#Additional_weapons] for details.
 * Easy extensibility towards a real "Client-Server"-based architecture, as `Game` (reflecting the backend)
-can be easily adopted to be used from the frontend-side. In order to do so, wrap parameters for call to `Game.submitMove` and 
+can be easily adopted to be used from a frontend. In order to do so, wrap parameters for call to `Game.submitMove` and 
 result `GameStatus` into appropriate JSON objects. 
 
 ### Current Deficiencies
