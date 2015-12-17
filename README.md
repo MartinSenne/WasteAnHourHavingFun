@@ -25,6 +25,8 @@ then from with sbt shell execute
 ```
 run
 ```
+
+For details on input see below in section (guide).
  
 ### Execute tests
  
@@ -74,6 +76,97 @@ As time is not unlimited, the following deficiencies exist
     * Use a state monad instead
     
 
+## Guide
+
+After starting the game, you are first required to select the player configuration. 
+Select
+
+* `a` for a computer vs computer match
+* `b` for a human vs computer match
+* `c` for a human vs human match
+ 
+If human players are involved, they are required to enter their name. Please do so to proceed.
+ 
+Game is thus setup, now each round is played asking you for *rock*, *paper* or *scissors*.
+ 
+### Computer vs. computer
+ 
+Simple watch the computers bashing each other.
+ 
+### Human vs. computer
+ 
+After the player configuration has been selected to be human vs. computer and your name was entered,
+you can do your moves.
+ 
+* `1` stands for rock
+* `2` stands for paper
+* `3` stands for scissors
+ 
+Start with entering a number to perform your first move. After doing so, the choice of 
+your computer opponent is displayed.
+Subsequent entries of your moves will push the game forward, until three rounds have been played,
+that were not `draw = 0:0`.
+  
+In the end, the winner and the final score is presented. An example game-flow is presented below.
+
+### Example game flow
+
+
+```
+Select a: Computer vs. Computer, b: Human vs. Computer, c: Human vs. Human: b
+Player name for Player A: Martin
+
+Martin               Computer Watson      Score
+-----------------------------------------------
+Select from 1: Rock, 2: Paper, 3: Scissors: 1
+
+Martin               Computer Watson      Score
+-----------------------------------------------
+Rock                 Rock                 0:0
+Select from 1: Rock, 2: Paper, 3: Scissors: 1
+
+Martin               Computer Watson      Score
+-----------------------------------------------
+Rock                 Rock                 0:0
+Rock                 Scissors             1:0
+Select from 1: Rock, 2: Paper, 3: Scissors: 1
+
+Martin               Computer Watson      Score
+-----------------------------------------------
+Rock                 Rock                 0:0
+Rock                 Scissors             1:0
+Rock                 Rock                 0:0
+Select from 1: Rock, 2: Paper, 3: Scissors: 1
+
+Martin               Computer Watson      Score
+-----------------------------------------------
+Rock                 Rock                 0:0
+Rock                 Scissors             1:0
+Rock                 Rock                 0:0
+Rock                 Rock                 0:0
+Select from 1: Rock, 2: Paper, 3: Scissors: 1
+
+Martin               Computer Watson      Score
+-----------------------------------------------
+Rock                 Rock                 0:0
+Rock                 Scissors             1:0
+Rock                 Rock                 0:0
+Rock                 Rock                 0:0
+Rock                 Scissors             1:0
+Select from 1: Rock, 2: Paper, 3: Scissors: 1
+
+Martin               Computer Watson      Score
+-----------------------------------------------
+Rock                 Rock                 0:0
+Rock                 Scissors             1:0
+Rock                 Rock                 0:0
+Rock                 Rock                 0:0
+Rock                 Scissors             1:0
+Rock                 Paper                0:1
+-----------------------------------------------
+Winner is Martin.
+Finalscore                                2:1
+```
 
   
 
