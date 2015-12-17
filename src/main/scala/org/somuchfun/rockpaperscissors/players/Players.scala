@@ -19,6 +19,7 @@ trait Player {
     gameStat.currentStep match {
       case Some(step) ⇒ {
         val choice = nextChoice( game )
+        // println(s"submit : ${playerDef}, ${step}, ${choice}")
         game.submitMove(playerDef, step, choice)
       }
       case None ⇒ {

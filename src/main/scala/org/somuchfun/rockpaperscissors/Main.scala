@@ -1,5 +1,6 @@
 package org.somuchfun.rockpaperscissors
 
+import org.somuchfun.rockpaperscissors.exceptions._
 import org.somuchfun.rockpaperscissors.players._
 import org.somuchfun.rockpaperscissors.ui.ConsoleUI
 
@@ -58,17 +59,17 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
           updateState(playerDef, step, choice)
           Success( gameStatus )
         } else {
-          Failure( new IllegalArgumentException("Move already made."))
+          Failure( new MoveAlreadyMadeException("Move already made."))
         }
       } else {
-        Failure(new IllegalArgumentException("Submitting move that does not have the correct step number."))
+        Failure(new IncorrectRoundNumberException("Submitting move that does not have the correct step number."))
       }
     } else {
-      Failure(new IllegalArgumentException("Game is already over."))
+      Failure(new GameAlreadyFinishedException("Game is already over."))
     }
   }
 
-  def play: Unit = {
+  def play: GameStatus = {
     val ui = new ConsoleUI(this)
     ui.view(gameStatus)
     while (state.currentStep.isDefined) {
@@ -76,6 +77,7 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
       playerB.triggerMove(this)
       ui.view(gameStatus)
     }
+    gameStatus
   }
   
   // Internal =====================================================

@@ -47,12 +47,8 @@ result `GameStatus` into appropriate JSON objects.
 As time is not unlimited, the following deficiencies exist
 
 * Test-wise
-  * Tests are basically not present. Therefor, at least the following tests need to be added:
-    * Test that a game does end properly after `n` rounds (being not draw)
-      * Generate sequence of moves in advance, apply them via mocked `MockPlayer`s and check result.
-    * Test the the final score is correct.  
-    * Test that invalid input to `Game.submitMove` is handled properly.
-      * Implementation: Use an player mock `InvalidPlayer` that calls `submitMove` with invalid parameters.
+  * Test coverage can be improved. Especially the following tests are missing:
+    * Test that the final score is correct.  
     * Tests that proof correct behaviour of ConsoleUI.
 * Code-wise
   * Nested `if-else` structure in `GameImpl.submitMove` is ugly. This can be easily resolved by turning if statement
