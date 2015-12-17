@@ -28,19 +28,19 @@ class ConsoleUI(val game: Game) {
 
   def score(result: RoundResult) = {
     result match {
-      case A ⇒ "1:0"
-      case B ⇒ "0:1"
+      case PlayerPosA ⇒ "1:0"
+      case PlayerPosB ⇒ "0:1"
       case Draw ⇒ "0:0" 
     }
   }
   
   private def finalScoreAndWinner( gameStatus: GameStatus) = {
-    val scoreA = gameStatus.completedRounds.filter(cm ⇒ cm.result.equals(A) ).size
-    val scoreB = gameStatus.completedRounds.filter(cm ⇒ cm.result.equals(B) ).size
-    val winner = if (scoreA > scoreB) A else {if (scoreB > scoreA) B else Draw}
+    val scoreA = gameStatus.completedRounds.filter(cm ⇒ cm.result.equals(PlayerPosA) ).size
+    val scoreB = gameStatus.completedRounds.filter(cm ⇒ cm.result.equals(PlayerPosB) ).size
+    val winner = if (scoreA > scoreB) PlayerPosA else {if (scoreB > scoreA) PlayerPosB else Draw}
     val s = winner match {
-      case A ⇒ s"Winner is ${gameStatus.playerA.name}."
-      case B ⇒ s"Winner is ${gameStatus.playerB.name}."
+      case PlayerPosA ⇒ s"Winner is ${gameStatus.playerA.name}."
+      case PlayerPosB ⇒ s"Winner is ${gameStatus.playerB.name}."
       case Draw ⇒ "Match is draw." // should never happen
     }
     s"${s}\n${withLength(41, "Finalscore")} ${scoreA.toInt}:${scoreB.toInt}"
@@ -71,7 +71,7 @@ object ConsoleUI {
     userStringSelect("Select a: Computer vs. Computer, b: Human vs. Computer, c: Human vs. Human: ", Seq("a", "b", "c"))
   }
   
-  def queryPlayerName( playerDef: PlayerDef ): String = {
+  def queryPlayerName( playerDef: PlayerPos ): String = {
     print(s"Player name for Player ${playerDef}: ")
     StdIn.readLine()
   }

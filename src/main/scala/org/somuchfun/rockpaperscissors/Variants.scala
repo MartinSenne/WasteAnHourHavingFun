@@ -14,8 +14,8 @@ trait GameVariant {
     val r = ( b-a, positiveRestMod2 )
     r match {
       case (0, _) ⇒ Draw
-      case (_, 0) ⇒ A
-      case (_, 1) ⇒ B
+      case (_, 0) ⇒ PlayerPosA
+      case (_, 1) ⇒ PlayerPosB
     }
   }
 }

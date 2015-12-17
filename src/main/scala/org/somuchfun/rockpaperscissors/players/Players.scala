@@ -1,13 +1,13 @@
 package org.somuchfun.rockpaperscissors.players
 
 import org.somuchfun.rockpaperscissors.ui.ConsoleUI
-import org.somuchfun.rockpaperscissors.{PlayerDef, Game}
+import org.somuchfun.rockpaperscissors.{PlayerPos, Game}
 
 trait Player {
   
   def name: String
   
-  def playerDef: PlayerDef
+  def playerDef: PlayerPos
 
   /**
     * This method is used to trigger a move.
@@ -37,7 +37,7 @@ trait Player {
   * @param name is player's name
   * @param playerDef is the role (either player A or player B)
   */
-class HumanPlayer(val name: String, val playerDef: PlayerDef) extends Player {
+class HumanPlayer(val name: String, val playerDef: PlayerPos) extends Player {
   override def nextChoice(game: Game): Int = {
     
     ConsoleUI.userChoiceForMove(game)
@@ -49,7 +49,7 @@ class HumanPlayer(val name: String, val playerDef: PlayerDef) extends Player {
   * @param nameAdd is an suffix to the name "Computer" of a computer player.
   * @param playerDef is the role (either player A or player B)
   */
-class ComputerPlayer(nameAdd: String, val playerDef: PlayerDef) extends Player {
+class ComputerPlayer(nameAdd: String, val playerDef: PlayerPos) extends Player {
   import scala.util.Random
   
   val rnd = new Random()
