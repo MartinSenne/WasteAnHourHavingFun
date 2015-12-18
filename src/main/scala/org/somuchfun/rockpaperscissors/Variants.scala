@@ -5,7 +5,7 @@ package org.somuchfun.rockpaperscissors
   * <b>balanced modulo games</b>.
   */
 trait GameVariant {
-  def n : Int
+  def n = elements.size
   def elements: Map[Int, String]
 
   def beats(a: Int, b: Int) : RoundResult = {
@@ -14,15 +14,13 @@ trait GameVariant {
     val r = ( b-a, positiveRestMod2 )
     r match {
       case (0, _) ⇒ Draw
-      case (_, 0) ⇒ PlayerPosA
-      case (_, 1) ⇒ PlayerPosB
+      case (_, 0) ⇒ PlayerIdA
+      case (_, 1) ⇒ PlayerIdB
     }
   }
 }
 
 class RegularVariant extends GameVariant {
-  override def n = 3
-
   override val elements = Map (
     1 -> "Rock",
     2 -> "Paper",
