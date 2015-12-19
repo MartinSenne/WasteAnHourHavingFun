@@ -33,30 +33,22 @@ class ConsoleUI(val game: Game) {
       case Draw ⇒ "0:0" 
     }
   }
-  
-  private def finalScoreAndWinner( gameStatus: GameReport) = {
-    val scoreA = gameStatus.completedRounds.filter(cm ⇒ cm.result.equals(PlayerIdA) ).size
-    val scoreB = gameStatus.completedRounds.filter(cm ⇒ cm.result.equals(PlayerIdB) ).size
-    val winner = if (scoreA > scoreB) PlayerIdA else {if (scoreB > scoreA) PlayerIdB else Draw}
-    val s = winner match {
-      case PlayerIdA ⇒ s"Winner is ${gameStatus.playerA.name}."
-      case PlayerIdB ⇒ s"Winner is ${gameStatus.playerB.name}."
-      case Draw ⇒ "Match is draw." // should never happen
-    }
-    s"${s}\n${withLength(41, "Finalscore")} ${scoreA.toInt}:${scoreB.toInt}"
-  }
 
-  def view(gameStatus: GameReport) = {
+  def view(report: Report) = {
     println()
-    println(s"${withLength(20, gameStatus.playerA.name)} ${withLength(20, gameStatus.playerB.name)} Score")
+    println(s"${withLength(20, report.playerA.name)} ${withLength(20, report.playerB.name)} Score")
     println( "-----------------------------------------------")
 
-    gameStatus.completedRounds.foreach(round ⇒ {
+    report.completedRounds.foreach(round ⇒ {
       println(s"${withLength(20,symbol(round.a))} ${withLength(20, symbol(round.b))} ${score(round.result)}")
     })
-    if (gameStatus.currentStep.equals(None)) {
-      println( "-----------------------------------------------")
-      println( finalScoreAndWinner( gameStatus ) )
+    if (report.isFinished == true) {
+      println( "===============================================")
+      val winnerName = report.score.winner match {
+        case PlayerIdA => report.playerA.name
+        case PlayerIdB => report.playerB.name
+      }
+      println( s"Winner is ${winnerName}.     Endresult: ${report.score.scoreA}:${report.score.scoreB}" )
     }
   }
 }

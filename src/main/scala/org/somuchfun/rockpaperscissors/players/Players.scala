@@ -15,16 +15,13 @@ trait Player {
     * @param game describes the current game
     */
   def triggerMove(game: Game): Unit = {
-    val gameStat = game.report
-    gameStat.currentStep match {
-      case Some(step) ⇒ {
-        val choice = nextChoice( game )
-        // println(s"submit : ${playerDef}, ${step}, ${choice}")
-        game.submitMove(playerDef, step, choice)
-      }
-      case None ⇒ {
-        throw new RuntimeException("Game is already finished. Trigger should never be called in that case.")
-      }  
+    val gameRepr = game.status
+    if (!gameRepr.isFinished) {
+      val choice = nextChoice(game)
+      game.submitMove(playerDef, gameRepr.currentStep, choice)
+    }
+    else {
+      throw new RuntimeException("Game is already finished. Trigger should never be called in that case.")
     }
   }
   

@@ -16,12 +16,13 @@ import scala.util.{Failure, Success, Try}
 class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Player, val rounds: Int) extends Game {
 
   // API side =================================================
-  override def report : GameReport = gameState match {
-    case Running( step, _, completedRounds) => GameReport(playerA, playerB, Some(step), completedRounds)
-    case Finished( scoreA, scoreB, completedRounds) => GameReport(playerA, playerB, None, completedRounds)
+  override def status : Report = state match {
+    case Running(step, _, completedRounds) => Report(playerA, playerB, completedRounds, false, step, null)
+    // TODO: GameReport is bad in its representation
+    case Finished(score, completedRounds) => Report(playerA, playerB, completedRounds, true, 0, score)
   }
 
-  override def submitMove(playerPos: PlayerId, submittedStep: Int, choice: Int) : Try[GameReport] = {
+  override def submitMove(playerPos: PlayerId, submittedStep: Int, choice: Int) : Try[Report] = {
     val tryUpdatedRound = for {
       (step, round) <- Validators.isGameRunning
       _ <- Validators.roundMatches(submittedStep, step)
@@ -30,18 +31,26 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
 
     tryUpdatedRound match {
       case Success(updatedRound) => {
-        gameState = advance(gameState, updatedRound)
-        Success( report )
+        state = advance(state, updatedRound)
+        Success( status )
       }
       case Failure(ex) => Failure(ex)
     }
   }
 
+//  /** Retrieve information about the score and the winner of a decided match. */
+//  override def finalResult: Try[Score] = {
+//    state match {
+//      case Finished(score, _) => Success(score)  
+//      case r:Running => Failure(new IllegalStateException("Match not finished."))
+//    }
+//  }
+
   // Internal =====================================================
   object Validators {
-    def isGameRunning: Try[(Int, Round)] = gameState match {
+    def isGameRunning: Try[(Int, Round)] = state match {
       case Running(step, round, _) => Success( (step, round) )
-      case Finished(_, _, _) => Failure(new GameAlreadyFinishedException("Game is already over."))
+      case Finished(_, _) => Failure(new GameAlreadyFinishedException("Game is already over."))
     }    
     
     def roundMatches(submittedStep: Int, currentStep: Int) : Try[Unit] =
@@ -58,7 +67,7 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
 
   sealed trait GameState
   case class Running(currentStep: Int, currentRound: Round, completedRounds: Seq[CompletedRound]) extends GameState
-  case class Finished(scoreA: Int, scoreB: Int, completedRounds: Seq[CompletedRound]) extends GameState
+  case class Finished(score: Score, completedRounds: Seq[CompletedRound]) extends GameState
 
   case class Round(choiceA: Option[Int], choiceB: Option[Int] ) {
     /** Create a [[CompletedRound]] if possible. */
@@ -72,35 +81,41 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
 
   /**
     * State of the game.
-    * Initial gameState is set to round 1, where no choices have been made, and no completed rounds are present so far.
+    * Initial state is set to round 1, where no choices have been made, and no completed rounds are present so far.
     *
-    * REMARK: As we are not allowed to use any Framework, we use a central place to keep our gameState.
-    * Basically, we should use an Actor of the Akka framework to encapsulate that gameState.
+    * REMARK: As we are not allowed to use any Framework, we use a central place to keep our state.
+    * Basically, we should use an Actor of the Akka framework to encapsulate that state.
     */
-  private var gameState: GameState = Running(1, Round(None, None), List())
+  private var state: GameState = Running(1, Round(None, None), List())
 
   private def advance(state: GameState, updatedRound: Round) : GameState = {
     state match {
-      case running@Running(_, _, completedRounds) => {
+      case running : Running => {
         updatedRound.optCompletedRound match {
-          case Some(completedRound) => {
+          case Some(completedRound) => { // round completed
             // warning: this add operation is costly ( O(n) ) !!!
-            val newCompletedMoves = completedRounds :+ completedRound
-            if (moreRoundsToPlay(newCompletedMoves)) {
-              Running(running.currentStep + 1, Round(None, None), newCompletedMoves)
+            val completedRounds = running.completedRounds :+ completedRound
+            if (moreRoundsToPlay(completedRounds)) {
+              Running(running.currentStep + 1, Round(None, None), completedRounds)
             } else {
-              val (scoreA, scoreB) = (3, 5)
-              Finished(scoreA, scoreB, newCompletedMoves)
+              Finished(calculateScore(completedRounds), completedRounds)
             }
           }
 
-          case None => {
+          case None => { // round not completed (e.g. other player's move is missing)
             running.copy(currentRound = updatedRound)
           }
         }
       }
-      case Finished(_, _, _) => throw new RuntimeException("This should be detected earlier.")
+      case Finished(_, _) => throw new RuntimeException("This should be detected earlier.")
     }
+  }
+  
+  private def calculateScore( completedRounds: Seq[CompletedRound] ) : Score = {
+    val scoreA = completedRounds.filter(cm ⇒ cm.result.equals(PlayerIdA) ).size
+    val scoreB = completedRounds.filter(cm ⇒ cm.result.equals(PlayerIdB) ).size
+    val winner = if (scoreA > scoreB) PlayerIdA else {if (scoreB > scoreA) PlayerIdB else throw new RuntimeException("Draw, still it can not be.")}
+    Score(scoreA, scoreB, winner)
   }
 
   private def moreRoundsToPlay(completedMoves: Seq[CompletedRound]) : Boolean = completedMoves.filter(round => round.result != Draw ).size < rounds

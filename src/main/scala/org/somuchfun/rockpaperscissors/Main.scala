@@ -26,14 +26,14 @@ object Main {
 }
 
 object GameSteering {
-  def play(game: Game) : GameReport = {
+  def play(game: Game) : Report = {
     val ui = new ConsoleUI(game)
-    ui.view(game.report)
-    while (game.report.currentStep.isDefined) {
+    ui.view(game.status)
+    while (!game.status.isFinished) {
       game.playerA.triggerMove(game)
       game.playerB.triggerMove(game)
-      ui.view(game.report)
+      ui.view(game.status)
     }
-    game.report
+    game.status
   }
 }
