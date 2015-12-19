@@ -18,7 +18,6 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
   // API side =================================================
   override def status : Report = state match {
     case Running(step, _, completedRounds) => Report(playerA, playerB, completedRounds, false, step, null)
-    // TODO: GameReport is bad in its representation
     case Finished(score, completedRounds) => Report(playerA, playerB, completedRounds, true, 0, score)
   }
 
@@ -26,7 +25,7 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
     val tryUpdatedRound = for {
       (step, round) <- Validators.isGameRunning
       _ <- Validators.roundMatches(submittedStep, step)
-      updatedRound <- Validators.executeMove( playerPos, choice, round)
+      updatedRound <- Validators.canExecuteMove( playerPos, choice, round)
     } yield updatedRound
 
     tryUpdatedRound match {
@@ -38,14 +37,6 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
     }
   }
 
-//  /** Retrieve information about the score and the winner of a decided match. */
-//  override def finalResult: Try[Score] = {
-//    state match {
-//      case Finished(score, _) => Success(score)  
-//      case r:Running => Failure(new IllegalStateException("Match not finished."))
-//    }
-//  }
-
   // Internal =====================================================
   object Validators {
     def isGameRunning: Try[(Int, Round)] = state match {
@@ -56,7 +47,7 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
     def roundMatches(submittedStep: Int, currentStep: Int) : Try[Unit] =
       if (submittedStep == currentStep) Success() else Failure(new IncorrectRoundNumberException("Move does not have expected round number."))
 
-    def executeMove(playerId: PlayerId, choice: Int, round: Round) : Try[Round] = {
+    def canExecuteMove(playerId: PlayerId, choice: Int, round: Round) : Try[Round] = {
       val f = Failure(new MoveAlreadyMadeException("Move is already made."))
       playerId match {
         case PlayerIdA => if (round.choiceA.isEmpty) Success(round.copy(choiceA = Some(choice))) else f
@@ -81,9 +72,12 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
 
   /**
     * State of the game.
-    * Initial state is set to round 1, where no choices have been made, and no completed rounds are present so far.
+    * Initial state of a match 
+    * - start in round 1, 
+    * - no choices have been made and 
+    * - no completed rounds exists for this match so far.
     *
-    * REMARK: As we are not allowed to use any Framework, we use a central place to keep our state.
+    * REMARK: As we are NOT allowed to use any Framework, we use a central (but mutable) place to keep our state.
     * Basically, we should use an Actor of the Akka framework to encapsulate that state.
     */
   private var state: GameState = Running(1, Round(None, None), List())
@@ -118,5 +112,8 @@ class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Playe
     Score(scoreA, scoreB, winner)
   }
 
-  private def moreRoundsToPlay(completedMoves: Seq[CompletedRound]) : Boolean = completedMoves.filter(round => round.result != Draw ).size < rounds
+  private def moreRoundsToPlay(completedRounds: Seq[CompletedRound]) : Boolean = {
+    val s = calculateScore(completedRounds)
+    (s.scoreA < rounds) && (s.scoreB < rounds)
+  }
 }
