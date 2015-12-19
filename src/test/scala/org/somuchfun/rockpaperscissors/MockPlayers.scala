@@ -15,7 +15,7 @@ object MockPlayers {
     val it = sequence.iterator
 
     /** Determine next move. */
-    override def nextChoice(game: Game): Int = {
+    override def nextChoice(game: RPSMatch): Int = {
       val choice = if (it.hasNext) it.next else 0
       println(choice)
       choice
@@ -26,6 +26,6 @@ object MockPlayers {
     val name = "DummyPlayer " + playerId
 
     /** Determine next move. */
-    override def nextChoice(game: Game): Int = 0
+    override def nextChoice(game: RPSMatch): Int = 0
   }
 }

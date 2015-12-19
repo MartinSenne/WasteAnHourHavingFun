@@ -2,13 +2,13 @@ package org.somuchfun.rockpaperscissors
 
 import org.scalatest.FunSuite
 import exceptions._
-import org.somuchfun.rockpaperscissors.fixture.PreparedGame
+import org.somuchfun.rockpaperscissors.fixture.PreparedMatch
 
 
 class SubmitChoicesTestSuite extends FunSuite {
   
   test("Invalid submitted round number is handled correctly.") {
-    val game = PreparedGame()
+    val game = PreparedMatch()
 
     val invalidStepResult = game.submitMove(PlayerIdA, 97, 1) // invalid step
     
@@ -17,7 +17,7 @@ class SubmitChoicesTestSuite extends FunSuite {
   }
 
   test("Double commit of choice is rejected.") {
-    val game = PreparedGame()
+    val game = PreparedMatch()
 
     game.submitMove(PlayerIdA, 2, 1)
     val doubleMove = game.submitMove(PlayerIdA, 2, 1) // invalid steps
@@ -27,7 +27,7 @@ class SubmitChoicesTestSuite extends FunSuite {
   }
 
   test("A finished game does not accept moves.") {
-    val game = PreparedGame()
+    val game = PreparedMatch()
 
     game.submitMove(PlayerIdA, 2, 2)
     game.submitMove(PlayerIdB, 2, 1)

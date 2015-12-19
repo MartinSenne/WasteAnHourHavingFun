@@ -1,7 +1,7 @@
 package org.somuchfun.rockpaperscissors.players
 
 import org.somuchfun.rockpaperscissors.ui.ConsoleInput
-import org.somuchfun.rockpaperscissors.{PlayerId, Game}
+import org.somuchfun.rockpaperscissors.{PlayerId, RPSMatch}
 
 trait Player {
   
@@ -14,7 +14,7 @@ trait Player {
     * Remark: In a real client-server app this would not be necessary as the client runs autarkicly.
     * @param game describes the current game
     */
-  def triggerMove(game: Game): Unit = {
+  def triggerMove(game: RPSMatch): Unit = {
     val gameRepr = game.status
     if (!gameRepr.isFinished) {
       val choice = nextChoice(game)
@@ -26,7 +26,7 @@ trait Player {
   }
   
   /** Determine next move. */
-  def nextChoice(game: Game): Int
+  def nextChoice(game: RPSMatch): Int
 }
 
 /**
@@ -35,7 +35,7 @@ trait Player {
   * @param playerId is the role (either player A or player B)
   */
 class HumanPlayer(val name: String, val playerId: PlayerId) extends Player {
-  override def nextChoice(game: Game): Int = {
+  override def nextChoice(game: RPSMatch): Int = {
     ConsoleInput.selectAMove(game)
   }
 }
@@ -51,7 +51,7 @@ class ComputerPlayer(nameAdd: String, val playerId: PlayerId) extends Player {
   val rnd = new Random()
   val name = "Computer " + nameAdd
 
-  override def nextChoice(game: Game): Int = {
+  override def nextChoice(game: RPSMatch): Int = {
     Thread.sleep(500)
     val choice = rnd.nextInt(game.variant.n) + 1
     choice

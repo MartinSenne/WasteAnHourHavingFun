@@ -1,12 +1,12 @@
 package org.somuchfun.rockpaperscissors.ui
 
-import org.somuchfun.rockpaperscissors.{PlayerId, Game}
+import org.somuchfun.rockpaperscissors.{PlayerId, RPSMatch}
 
 import scala.io.StdIn
 import scala.util.Try
 
 object ConsoleInput {
-  def selectAMove(game: Game): Int = {
+  def selectAMove(game: RPSMatch): Int = {
     val text = "Select from " + game.variant.elements.map( x ⇒ s"${(x._1)}: ${x._2}" ).mkString(", ") + ": "
     userNumberSelection(text, 1, game.variant.n)
   }

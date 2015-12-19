@@ -9,8 +9,9 @@ class GeneralGamePlayTestSuite extends FunSuite {
     val playerA = new SequencePlayer("A", PlayerIdA, Seq(1, 2, 3))
     val playerB = new SequencePlayer("B", PlayerIdB, Seq(3, 1, 2))
 
-    val game = Game(new RegularVariant, playerA, playerB, 3)
-    val status = GameSteering.play(game)
+    val game = RPSMatch(new RegularVariant, 3)
+    val presenter = new GamePresenter(playerA, playerB)
+    val status = presenter.play(game)
 
     val comp = status.completedRounds.toArray
 
@@ -24,8 +25,9 @@ class GeneralGamePlayTestSuite extends FunSuite {
     val playerA = new SequencePlayer("A", PlayerIdA, Seq(1, 2, 3, 2, 3))
     val playerB = new SequencePlayer("B", PlayerIdB, Seq(3, 2, 3, 1, 2))
 
-    val game = Game(new RegularVariant, playerA, playerB, 3)
-    val status = GameSteering.play(game)
+    val game = RPSMatch(new RegularVariant, 3)
+    val presenter = new GamePresenter(playerA, playerB)
+    val status = presenter.play(game)
 
     val comp = status.completedRounds.toArray
 

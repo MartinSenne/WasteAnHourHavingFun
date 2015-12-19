@@ -2,7 +2,7 @@ package org.somuchfun.rockpaperscissors.ui
 
 import org.somuchfun.rockpaperscissors._
 
-class ConsoleUI(val game: Game) {
+class ConsoleUI(val game: RPSMatch) {
   private def symbol(choice: Int) : String = {
     game.variant.elements(choice)
   }
@@ -24,9 +24,9 @@ class ConsoleUI(val game: Game) {
     }
   }
 
-  def view(report: Report) = {
+  def view(report: Report, playerAName: String, playerBName: String) = {
     println()
-    println(s"${withLength(20, report.playerA.name)} ${withLength(20, report.playerB.name)} Score")
+    println(s"${withLength(20, playerAName)} ${withLength(20, playerBName)} Score")
     println( "-----------------------------------------------")
 
     report.completedRounds.foreach(round ⇒ {
@@ -34,9 +34,9 @@ class ConsoleUI(val game: Game) {
     })
     if (report.isFinished == true) {
       println( "===============================================")
-      val winnerName = report.score.winner match {
-        case PlayerIdA => report.playerA.name
-        case PlayerIdB => report.playerB.name
+      val winnerName =  report.score.winner match {
+        case PlayerIdA => playerAName
+        case PlayerIdB => playerBName
       }
       println( s"Winner is ${winnerName}.     Endresult: ${report.score.scoreA}:${report.score.scoreB}" )
     }

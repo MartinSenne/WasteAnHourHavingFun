@@ -7,18 +7,16 @@ import org.somuchfun.rockpaperscissors.players._
 import scala.util.{Failure, Success, Try}
 
 /**
-  * State based (non-actor based) implementation of a [[Game]].
+  * State based (non-actor based) implementation of a [[RPSMatch]].
   * @param variant specifies the variant to use.
-  * @param playerA first player (A) according to [[Player]]
-  * @param playerB second player (B) according to [[Player]]
   * @param rounds number of rounds to play.
   */
-class GameImpl(val variant: GameVariant, val playerA: Player, val playerB: Player, val rounds: Int) extends Game {
+class RPSMatchImpl(val variant: RPSVariant, val rounds: Int) extends RPSMatch {
 
   // API side =================================================
   override def status : Report = state match {
-    case Running(step, _, completedRounds) => Report(playerA, playerB, completedRounds, false, step, null)
-    case Finished(score, completedRounds) => Report(playerA, playerB, completedRounds, true, 0, score)
+    case Running(step, _, completedRounds) => Report(completedRounds, false, step, null)
+    case Finished(score, completedRounds) => Report(completedRounds, true, 0, score)
   }
 
   override def submitMove(playerPos: PlayerId, submittedStep: Int, choice: Int) : Try[Report] = {

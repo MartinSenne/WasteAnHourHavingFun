@@ -20,20 +20,22 @@ object Main {
       }
     }
 
-    val game = Game(new RegularVariant, players._1, players._2, 3)
-    GameSteering.play(game)
+    val rpsMatch = RPSMatch(new RegularVariant, 3)
+    
+    val presenter = new GamePresenter( players._1, players._2)
+    presenter.play(rpsMatch)
   }
 }
 
-object GameSteering {
-  def play(game: Game) : Report = {
-    val ui = new ConsoleUI(game)
-    ui.view(game.status)
-    while (!game.status.isFinished) {
-      game.playerA.triggerMove(game)
-      game.playerB.triggerMove(game)
-      ui.view(game.status)
+class GamePresenter(playerA: Player, playerB: Player) {
+  def play(rpsMatch: RPSMatch) : Report = {
+    val ui = new ConsoleUI(rpsMatch)
+    ui.view(rpsMatch.status, playerA.name, playerB.name)
+    while (!rpsMatch.status.isFinished) {
+      playerA.triggerMove(rpsMatch)
+      playerB.triggerMove(rpsMatch)
+      ui.view(rpsMatch.status, playerA.name, playerB.name)
     }
-    game.status
+    rpsMatch.status
   }
 }
