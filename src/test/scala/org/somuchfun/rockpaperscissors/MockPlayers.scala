@@ -8,7 +8,7 @@ import org.somuchfun.rockpaperscissors.players.Player
 object MockPlayers {
 
 
-  class SequencePlayer(val nameAdd: String, val playerDef: PlayerId, sequence: Seq[Int]) extends Player {
+  class SequencePlayer(val nameAdd: String, val playerId: PlayerId, sequence: Seq[Int]) extends Player {
 
     val name = "SequencePlayer " + nameAdd
 
@@ -22,8 +22,8 @@ object MockPlayers {
     }
   }
 
-  class DummyPlayer(val playerDef: PlayerId) extends Player {
-    val name = "DummyPlayer " + playerDef
+  class DummyPlayer(val playerId: PlayerId) extends Player {
+    val name = "DummyPlayer " + playerId
 
     /** Determine next move. */
     override def nextChoice(game: Game): Int = 0

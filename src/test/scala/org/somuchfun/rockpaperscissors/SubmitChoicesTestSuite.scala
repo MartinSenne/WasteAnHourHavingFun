@@ -1,23 +1,9 @@
 package org.somuchfun.rockpaperscissors
 
 import org.scalatest.FunSuite
-import MockPlayers.DummyPlayer
 import exceptions._
+import org.somuchfun.rockpaperscissors.fixture.PreparedGame
 
-
-object PreparedGame {
-  def apply() : Game = {
-    val playerA = new DummyPlayer(PlayerIdA)
-    val playerB = new DummyPlayer(PlayerIdB)
-
-    val game = Game(new RegularVariant, playerA, playerB, 3)
-
-    game.submitMove(PlayerIdA, 1, 1)
-    game.submitMove(PlayerIdB, 1, 3)
-
-    game
-  }
-}
 
 class SubmitChoicesTestSuite extends FunSuite {
   
