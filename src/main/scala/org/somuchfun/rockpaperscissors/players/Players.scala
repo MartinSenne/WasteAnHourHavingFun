@@ -36,7 +36,6 @@ trait Player {
   */
 class HumanPlayer(val name: String, val playerDef: PlayerId) extends Player {
   override def nextChoice(game: Game): Int = {
-    
     ConsoleUI.userChoiceForMove(game)
   }
 }
