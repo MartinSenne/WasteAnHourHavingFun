@@ -1,4 +1,4 @@
-package org.somuchfun.rockpaperscissors.ui.util
+package org.somuchfun.rockpaperscissors.ui.views.impl.console.util
 
 import org.somuchfun.rockpaperscissors.{Draw, PlayerIdA, PlayerIdB, RoundResult}
 

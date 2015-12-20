@@ -8,10 +8,15 @@ import scala.util.Try
 
 sealed trait PlayerId
 sealed trait RoundResult
-case object PlayerIdA extends PlayerId with RoundResult
-case object PlayerIdB extends PlayerId with RoundResult
+case object PlayerIdA extends PlayerId with RoundResult {
+  override def toString: String = "A"
+}
+case object PlayerIdB extends PlayerId with RoundResult {
+  override def toString: String = "B"
+}
 case object Draw extends RoundResult
 
+/** Score of a match. Can be also an intermediate score. */
 case class Score(scoreA: Int, scoreB: Int, winner: RoundResult)
 
 /** A round that has been played by both players. */

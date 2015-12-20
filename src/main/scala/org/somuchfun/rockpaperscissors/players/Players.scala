@@ -1,6 +1,6 @@
 package org.somuchfun.rockpaperscissors.players
 
-import org.somuchfun.rockpaperscissors.ui.impl.GenericConsoleViews
+import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews.ConsoleSelectMoveView
 import org.somuchfun.rockpaperscissors.{PlayerId, RPSMatch}
 
 trait Player {
@@ -36,7 +36,8 @@ trait Player {
   */
 class HumanPlayer(val name: String, val playerId: PlayerId) extends Player {
   override def nextChoice(game: RPSMatch): Int = {
-    GenericConsoleViews.selectAMove(game)
+    (new ConsoleSelectMoveView).selectMove(playerId, game.variant.elements)
+      // selectAMove(game)
   }
 }
 

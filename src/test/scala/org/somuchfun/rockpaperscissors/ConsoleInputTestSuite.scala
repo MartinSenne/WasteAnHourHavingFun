@@ -3,8 +3,7 @@ package org.somuchfun.rockpaperscissors
 import java.io.ByteArrayInputStream
 
 import org.scalatest.FunSuite
-import org.somuchfun.rockpaperscissors.ui.impl.GenericConsoleViews
-import org.somuchfun.rockpaperscissors.ui.util.ConsoleInputUtil._
+import org.somuchfun.rockpaperscissors.ui.views.impl.console.util.ConsoleInputUtil._
 
 class ConsoleInputTestSuite extends FunSuite {
   
