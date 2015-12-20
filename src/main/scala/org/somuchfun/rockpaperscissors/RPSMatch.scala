@@ -12,7 +12,7 @@ case object PlayerIdA extends PlayerId with RoundResult
 case object PlayerIdB extends PlayerId with RoundResult
 case object Draw extends RoundResult
 
-case class Score(scoreA: Int, scoreB: Int, winner: PlayerId)
+case class Score(scoreA: Int, scoreB: Int, winner: RoundResult)
 
 /** A round that has been played by both players. */
 case class CompletedRound(a: Int, b: Int, result: RoundResult)
@@ -35,7 +35,7 @@ trait RPSMatch {
   def submitMove(playerDef: PlayerId, step: Int, choice: Int) : Try[Report]
 
   /** A variant: Can be Rock-Scissors-Stone or any modulo-based game. */
-  def variant: RPSVariant
+  def variant: Variant
 
   /** Retrieve status of current game. */
   def status: Report
@@ -43,7 +43,7 @@ trait RPSMatch {
 
 /** Factory-like companion object. */
 object RPSMatch {
-  def apply(variant: RPSVariant, numberOfRounds : Int ) : RPSMatch = {
+  def apply(variant: Variant, numberOfRounds : Int ) : RPSMatch = {
     new RPSMatchImpl(new RegularVariant, 3)
   }
 }

@@ -11,7 +11,7 @@ import scala.util.{Failure, Success, Try}
   * @param variant specifies the variant to use.
   * @param rounds number of rounds to play.
   */
-class RPSMatchImpl(val variant: RPSVariant, val rounds: Int) extends RPSMatch {
+class RPSMatchImpl(val variant: Variant, val rounds: Int) extends RPSMatch {
 
   // API side =================================================
   override def status : Report = state match {
@@ -106,7 +106,7 @@ class RPSMatchImpl(val variant: RPSVariant, val rounds: Int) extends RPSMatch {
   private def calculateScore( completedRounds: Seq[CompletedRound] ) : Score = {
     val scoreA = completedRounds.filter(cm ⇒ cm.result.equals(PlayerIdA) ).size
     val scoreB = completedRounds.filter(cm ⇒ cm.result.equals(PlayerIdB) ).size
-    val winner = if (scoreA > scoreB) PlayerIdA else {if (scoreB > scoreA) PlayerIdB else throw new RuntimeException("Draw, still it can not be.")}
+    val winner = if (scoreA > scoreB) PlayerIdA else {if (scoreB > scoreA) PlayerIdB else Draw}
     Score(scoreA, scoreB, winner)
   }
 

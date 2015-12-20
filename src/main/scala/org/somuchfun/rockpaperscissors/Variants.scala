@@ -4,7 +4,7 @@ package org.somuchfun.rockpaperscissors
   * Game variant describes properties of 
   * <b>balanced modulo games</b>.
   */
-trait RPSVariant {
+trait Variant {
   def n = elements.size
   def elements: Map[Int, String]
 
@@ -20,7 +20,7 @@ trait RPSVariant {
   }
 }
 
-class RegularVariant extends RPSVariant {
+class RegularVariant extends Variant {
   override val elements = Map (
     1 -> "Rock",
     2 -> "Paper",

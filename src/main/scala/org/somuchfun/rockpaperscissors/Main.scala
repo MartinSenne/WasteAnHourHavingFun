@@ -1,7 +1,7 @@
 package org.somuchfun.rockpaperscissors
 
 import org.somuchfun.rockpaperscissors.players._
-import org.somuchfun.rockpaperscissors.ui.{ConsoleUI, ConsoleInput}
+import org.somuchfun.rockpaperscissors.ui.{ConsoleReportView, ConsoleInput}
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -22,20 +22,25 @@ object Main {
 
     val rpsMatch = RPSMatch(new RegularVariant, 3)
     
-    val presenter = new GamePresenter( players._1, players._2)
-    presenter.play(rpsMatch)
+    val presenter = new GamePresenter( rpsMatch, players._1, players._2)
+    presenter.play
   }
 }
 
-class GamePresenter(playerA: Player, playerB: Player) {
-  def play(rpsMatch: RPSMatch) : Report = {
-    val ui = new ConsoleUI(rpsMatch)
-    ui.view(rpsMatch.status, playerA.name, playerB.name)
-    while (!rpsMatch.status.isFinished) {
-      playerA.triggerMove(rpsMatch)
-      playerB.triggerMove(rpsMatch)
-      ui.view(rpsMatch.status, playerA.name, playerB.name)
+class GamePresenter(rpsMatchModel: RPSMatch, playerA: Player, playerB: Player) {
+  def play : Report = {
+    val reportView = new ConsoleReportView // ConsoleUI(rpsMatchModel)
+    val elements = rpsMatchModel.variant.elements
+    reportView.show(rpsMatchModel.status, playerA.name, playerB.name, elements)
+    while (!rpsMatchModel.status.isFinished) {
+      playerA.triggerMove(rpsMatchModel)
+      playerB.triggerMove(rpsMatchModel)
+      reportView.show(rpsMatchModel.status, playerA.name, playerB.name, elements)
     }
-    rpsMatch.status
+    rpsMatchModel.status
   }
+}
+
+trait ReportView {
+  def show(report: Report, playerAName: String, playerBName: String, elements: Map[Int, String])
 }
