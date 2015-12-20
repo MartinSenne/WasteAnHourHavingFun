@@ -2,8 +2,9 @@ package org.somuchfun.rockpaperscissors
 
 import org.scalatest.FunSuite
 import MockPlayers.SequencePlayer
+import org.somuchfun.rockpaperscissors.ui.GamePresenter
 
-class GeneralGamePlayTestSuite extends FunSuite {
+class MatchPlayTestSuite extends FunSuite {
   // @Todo: Add general test version instead of fixed version.
   test("Game with no draws ends correctly.") {
     val playerA = new SequencePlayer("A", PlayerIdA, Seq(1, 2, 3))

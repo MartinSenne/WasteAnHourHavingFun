@@ -1,31 +1,10 @@
-package org.somuchfun.rockpaperscissors.ui
+package org.somuchfun.rockpaperscissors.ui.impl
 
 import org.somuchfun.rockpaperscissors._
+import org.somuchfun.rockpaperscissors.ui.ReportView
+import org.somuchfun.rockpaperscissors.ui.util.ConsoleFormatting
 
-object ConsoleFormatting {
-  
-  private def spaces(length: Int): String = {
-    Iterator.fill(length)(' ').mkString("")
-  }
 
-  def withLength(l: Int, x: String): String = {
-    val i = x.length
-    if (i < l) {
-      x + spaces(l - i)
-    } else {
-      x.substring(0, l)
-    }
-  }
-
-  def score(result: RoundResult) = {
-    result match {
-      case PlayerIdA ⇒ "1:0"
-      case PlayerIdB ⇒ "0:1"
-      case Draw ⇒ "0:0"
-    }
-  }
-}
-  
 class ConsoleReportView extends ReportView {
   import ConsoleFormatting._
 
