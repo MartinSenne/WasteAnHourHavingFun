@@ -1,12 +1,16 @@
 package org.somuchfun.rockpaperscissors
 
 import org.somuchfun.rockpaperscissors.players._
-import org.somuchfun.rockpaperscissors.ui.MatchPresenter
-import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews.{ConsoleSelectPlayerNameView, ConsoleSelectGameTypeView, ConsoleReportView}
+import org.somuchfun.rockpaperscissors.ui.Presenters.MatchPresenter
+import org.somuchfun.rockpaperscissors.ui.views.AbstractViews._
+import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews.{ConsolePlayerMoveView, ConsoleSelectPlayerNameView, ConsoleSelectGameTypeView, ConsoleReportView}
 
 
 object Main {
   def main(args: Array[String]): Unit = {
+    val game = Game
+    
+    
     val gameType = (new ConsoleSelectGameTypeView).selectGameType()
 
     val players = gameType match {
@@ -23,11 +27,24 @@ object Main {
     }
 
     val rpsMatch = RPSMatch(new RegularVariant, 2, players._1, players._2) // our model
-    val reportView = new ConsoleReportView
     
-    val presenter = new MatchPresenter(rpsMatch, reportView)
-    presenter.play
+    val presenter = new MatchPresenter(rpsMatch)
+    presenter.go
   }
+}
+
+trait ViewFactory {
+  def createReportView : ReportView
+  def createSelectGameTypeView : SelectGameTypeView
+  def createSelectPlayerNameView : SelectPlayerNameView
+  def createPlayerMoveView : PlayerMoveView
+}
+
+object ConsoleViewFactory extends ViewFactory {
+  override def createReportView: ReportView = new ConsoleReportView
+  override def createPlayerMoveView: PlayerMoveView = new ConsolePlayerMoveView
+  override def createSelectGameTypeView: SelectGameTypeView = new ConsoleSelectGameTypeView
+  override def createSelectPlayerNameView: SelectPlayerNameView = new ConsoleSelectPlayerNameView
 }
 
 

@@ -59,7 +59,7 @@ class HumanPlayer(val name: String, val playerId: PlayerId) extends Player {
 class ComputerPlayer(nameAdd: String, val playerId: PlayerId) extends Player {
   import scala.util.Random
   
-  val playerType = TypeHuman
+  val playerType = TypeComputer
   val rnd = new Random()
   val name = "Computer " + nameAdd
 

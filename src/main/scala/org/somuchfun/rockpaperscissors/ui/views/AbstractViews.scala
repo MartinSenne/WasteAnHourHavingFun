@@ -23,10 +23,8 @@ object AbstractViews {
   }
 
   trait PlayerMoveView {
-    def elements: Map[Int, String]
-    
-    def showMove(playerDescription: PlayerDescription, computerChoice: Int) : Unit
+    def showMove(playerDescription: PlayerDescription, computerChoice: Int, elements: Map[Int, String]) : Unit
 
-    def selectMove(playerDescription: PlayerDescription): Int
+    def selectMove(playerDescription: PlayerDescription, elements: Map[Int, String]): Int
   }
 }

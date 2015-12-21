@@ -2,8 +2,7 @@ package org.somuchfun.rockpaperscissors
 
 import org.scalatest.FunSuite
 import MockPlayers.SequencePlayer
-import org.somuchfun.rockpaperscissors.ui.MatchPresenter
-import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews.ConsoleReportView
+import org.somuchfun.rockpaperscissors.ui.Presenters.MatchPresenter
 
 class MatchPlayTestSuite extends FunSuite {
   // @Todo: Add general test version instead of fixed version.
@@ -12,8 +11,8 @@ class MatchPlayTestSuite extends FunSuite {
     val playerB = new SequencePlayer("B", PlayerIdB, Seq(3, 1, 2))
 
     val rpsMatch = RPSMatch(new RegularVariant, 3, playerA, playerB)
-    val presenter = new MatchPresenter(rpsMatch, new ConsoleReportView)
-    val status = presenter.play
+    val presenter = new MatchPresenter(rpsMatch)
+    val status = presenter.go
 
     val comp = status.completedRounds.toArray
 
@@ -28,8 +27,8 @@ class MatchPlayTestSuite extends FunSuite {
     val playerB = new SequencePlayer("B", PlayerIdB, Seq(3, 2, 3, 1, 2))
 
     val rpsMatch = RPSMatch(new RegularVariant, 3, playerA, playerB)
-    val presenter = new MatchPresenter(rpsMatch, new ConsoleReportView)
-    val status = presenter.play
+    val presenter = new MatchPresenter(rpsMatch)
+    val status = presenter.go
 
     val comp = status.completedRounds.toArray
 

@@ -27,14 +27,15 @@ object ConsoleViews {
           case PlayerIdA => playerAName
           case PlayerIdB => playerBName
         }
-        println(s"Winner is ${winnerName}.     Endresult: ${report.score.scoreA}:${report.score.scoreB}")
+        val winnerText= s"Winner is ${winnerName}."
+        println(s"${withLength(30, winnerText)} Endresult: ${report.score.scoreA}:${report.score.scoreB}")
       }
     }
   }
 
   class ConsoleSelectGameTypeView extends SelectGameTypeView {
     def selectGameType(): String = {
-      val text = "Select gametype: " + types.map(x => s"${x._1}: ${x._2}").mkString(", ")
+      val text = "Select gametype: " + types.map(x => s"${x._1}) ${x._2}").mkString(", ") + ": "
       userAlternativesSelection(text, types.keySet.toSeq)
     }
   }
@@ -46,19 +47,19 @@ object ConsoleViews {
     }
   }
 
-  class ConsolePlayerMoveView(val elements: Map[Int, String]) extends PlayerMoveView {
+  class ConsolePlayerMoveView extends PlayerMoveView {
     private def title(pd: PlayerDescription) : String = {
-      s"Player ${pd.playerId} (${pd.name}}"
+      s"Player ${pd.playerId} (${pd.name})"
     }
     
-    def selectMove(pd: PlayerDescription): Int = {
+    def selectMove(pd: PlayerDescription, elements: Map[Int, String]): Int = {
       val n = elements.size
-      val text = s" ${title(pd)}: Please select from " + elements.map(x ⇒ s"${x._1}: ${x._2}").mkString(", ") + ": "
+      val text = s"${title(pd)}: Please select from " + elements.map(x ⇒ s"${x._1}) ${x._2}").mkString(", ") + ": "
       userNumberSelection(text, 1, n)
     }
 
-    override def showMove(pd: PlayerDescription, computerChoice: Int): Unit = {
-      println( s"{title(pd)} made choice ${elements(computerChoice)}" )
+    override def showMove(pd: PlayerDescription, computerChoice: Int, elements: Map[Int, String]): Unit = {
+      println( s"${title(pd)} made choice ${elements(computerChoice)}" )
     }
   }
 }
