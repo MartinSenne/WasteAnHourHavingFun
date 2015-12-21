@@ -5,7 +5,6 @@ import MockPlayers.SequencePlayer
 import org.somuchfun.rockpaperscissors.ui.Presenters.MatchPresenter
 
 class MatchPlayTestSuite extends FunSuite {
-  // @Todo: Add general test version instead of fixed version.
   test("Game with no draws ends correctly.") {
     val playerA = new SequencePlayer("A", PlayerIdA, Seq(1, 2, 3))
     val playerB = new SequencePlayer("B", PlayerIdB, Seq(3, 1, 2))

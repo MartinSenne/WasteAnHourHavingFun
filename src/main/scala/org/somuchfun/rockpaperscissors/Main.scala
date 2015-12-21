@@ -1,9 +1,9 @@
 package org.somuchfun.rockpaperscissors
 
 import org.somuchfun.rockpaperscissors.players._
-import org.somuchfun.rockpaperscissors.ui.Presenters.{SelectPlayerNamePresenter, SelectGameTypePresenter, MatchPresenter}
+import org.somuchfun.rockpaperscissors.ui.Presenters._
 import org.somuchfun.rockpaperscissors.ui.views.AbstractViews._
-import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews.{ConsolePlayerMoveView, ConsoleSelectPlayerNameView, ConsoleSelectGameTypeView, ConsoleReportView}
+import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews._
 
 
 object Main {
@@ -28,7 +28,7 @@ object ConsoleViewFactory extends ViewFactory {
 }
 
 class GameControl(viewFactory: ViewFactory) {
-  def start: Unit = {
+  def start: Report = {
     val selectGameTypePresenter = new SelectGameTypePresenter(viewFactory.createSelectGameTypeView)
     val gameType = selectGameTypePresenter.go
 
