@@ -62,4 +62,16 @@ object Presenters {
       reportView.show( report, playerADesc.name, playerBDesc.name, elements)
     }
   }
+  
+  class SelectPlayerNamePresenter(playerId: PlayerId, selectPlayerNameView: SelectPlayerNameView) {
+    def go: String = {
+      selectPlayerNameView.selectPlayerName(playerId)
+    }
+  }
+
+  class SelectGameTypePresenter( view: SelectGameTypeView) {
+    def go: String = {
+      view.selectGameType()
+    }
+  }
 }

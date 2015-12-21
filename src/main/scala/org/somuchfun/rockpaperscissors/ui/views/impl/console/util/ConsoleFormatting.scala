@@ -2,9 +2,6 @@ package org.somuchfun.rockpaperscissors.ui.views.impl.console.util
 
 import org.somuchfun.rockpaperscissors.{Draw, PlayerIdA, PlayerIdB, RoundResult}
 
-/**
-  * Created by martin on 20.12.15.
-  */
 object ConsoleFormatting {
   
   private def spaces(length: Int): String = {
