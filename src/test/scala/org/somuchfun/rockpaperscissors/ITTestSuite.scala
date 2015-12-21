@@ -20,7 +20,8 @@ class ITTestSuite extends FunSuite {
       "3\n"        // fourth round, B: scissors => 2:1
     
     StdInUtil.useStringAsStdIn(input)
-    val control = new GameControl(ConsoleViewFactory)
+    implicit val factory = ConsoleViewFactory
+    val control = new GameControl
     val report = control.start
     
     assertResult(4)(report.completedRounds.size)

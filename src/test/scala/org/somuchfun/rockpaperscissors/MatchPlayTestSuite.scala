@@ -10,7 +10,7 @@ class MatchPlayTestSuite extends FunSuite {
     val playerB = new SequencePlayer("B", PlayerIdB, Seq(3, 1, 2))
 
     val rpsMatch = RPSMatch(new RegularVariant, 3, playerA, playerB)
-    val presenter = new MatchPresenter(rpsMatch)
+    val presenter = new MatchPresenter(rpsMatch)(ConsoleViewFactory)
     val status = presenter.go
 
     val comp = status.completedRounds.toArray
@@ -26,7 +26,7 @@ class MatchPlayTestSuite extends FunSuite {
     val playerB = new SequencePlayer("B", PlayerIdB, Seq(3, 2, 3, 1, 2))
 
     val rpsMatch = RPSMatch(new RegularVariant, 3, playerA, playerB)
-    val presenter = new MatchPresenter(rpsMatch)
+    val presenter = new MatchPresenter(rpsMatch)(ConsoleViewFactory)
     val status = presenter.go
 
     val comp = status.completedRounds.toArray

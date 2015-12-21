@@ -8,7 +8,8 @@ import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews._
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val control = new GameControl(ConsoleViewFactory)
+    implicit val factory = ConsoleViewFactory
+    val control = new GameControl
     control.start
   }
 }
@@ -27,7 +28,7 @@ object ConsoleViewFactory extends ViewFactory {
   override def createSelectPlayerNameView: SelectPlayerNameView = new ConsoleSelectPlayerNameView
 }
 
-class GameControl(viewFactory: ViewFactory) {
+class GameControl(implicit viewFactory: ViewFactory) {
   def start: Report = {
     val selectGameTypePresenter = new SelectGameTypePresenter(viewFactory.createSelectGameTypeView)
     val gameType = selectGameTypePresenter.go

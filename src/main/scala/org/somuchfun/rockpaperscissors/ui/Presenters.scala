@@ -2,25 +2,24 @@ package org.somuchfun.rockpaperscissors.ui
 
 import org.somuchfun.rockpaperscissors.ui.views.AbstractViews._
 import org.somuchfun.rockpaperscissors._
-import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews.{ConsoleReportView, ConsolePlayerMoveView}
 
-import scala.util.{Success, Failure, Try}
+import scala.util.{Success, Failure}
 
 object Presenters {
 
-  class MatchPresenter(rpsMatchModel: RPSMatch) {
+  class MatchPresenter(rpsMatchModel: RPSMatch)(implicit factory: ViewFactory) {
     def go: Report = {
       val elements = rpsMatchModel.variant.elements
       val playerADesc = rpsMatchModel.playerInfo(PlayerIdA)
       val playerBDesc = rpsMatchModel.playerInfo(PlayerIdB)
 
       // Player move view and presenter
-      val playerMoveView = new ConsolePlayerMoveView
+      val playerMoveView = factory.createPlayerMoveView 
       val playerMovePresenterA = new PlayerMovePresenter(playerADesc, rpsMatchModel, playerMoveView)
       val playerMovePresenterB = new PlayerMovePresenter(playerBDesc, rpsMatchModel, playerMoveView)
       
       // Report view and presenter
-      val reportView = new ConsoleReportView
+      val reportView = factory.createReportView 
       val reportPresenter = new ReportPresenter(rpsMatchModel, reportView)
 
       do {
