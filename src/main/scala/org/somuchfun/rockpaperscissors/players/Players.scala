@@ -1,30 +1,33 @@
 package org.somuchfun.rockpaperscissors.players
 
-import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews.ConsoleSelectMoveView
-import org.somuchfun.rockpaperscissors.{PlayerId, RPSMatch}
+import org.somuchfun.rockpaperscissors._
 
 trait Player {
   
   def name: String
   
   def playerId: PlayerId
-
-  /**
-    * This method is used to trigger a move.
-    * Remark: In a real client-server app this would not be necessary as the client runs autarkicly.
-    * @param game describes the current game
-    */
-  def triggerMove(game: RPSMatch): Unit = {
-    val gameRepr = game.status
-    if (!gameRepr.isFinished) {
-      val choice = nextChoice(game)
-      game.submitMove(playerId, gameRepr.currentStep, choice)
-    }
-    else {
-      throw new RuntimeException("Game is already finished. Trigger should never be called in that case.")
-    }
-  }
   
+  def playerType: PlayerType
+  
+  def asDescription: PlayerDescription = PlayerDescription( name, playerId, playerType )
+//
+//  /**
+//    * This method is used to trigger a move.
+//    * Remark: In a real client-server app this would not be necessary as the client runs autarkicly.
+//    * @param game describes the current game
+//    */
+//  def triggerMove(game: RPSMatch): Unit = {
+//    val gameRepr = game.status
+//    if (!gameRepr.isFinished) {
+//      val choice = nextChoice(game)
+//      game.submitMove(playerId, gameRepr.currentStep, choice)
+//    }
+//    else {
+//      throw new RuntimeException("Game is already finished. Trigger should never be called in that case.")
+//    }
+//  }
+//  
   /** Determine next move. */
   def nextChoice(game: RPSMatch): Int
 }
@@ -35,10 +38,17 @@ trait Player {
   * @param playerId is the role (either player A or player B)
   */
 class HumanPlayer(val name: String, val playerId: PlayerId) extends Player {
+  val playerType = TypeHuman
+
   override def nextChoice(game: RPSMatch): Int = {
-    (new ConsoleSelectMoveView).selectMove(playerId, game.variant.elements)
-      // selectAMove(game)
+    throw new RuntimeException("A human player does not provide automatic moves.")
   }
+//  override def nextChoice(game: RPSMatch): Int = {
+//    (new ConsolePlayerMoveView).selectMove(playerId, game.variant.elements)
+//      // selectAMove(game)
+//  }
+  /** Determine next move. */
+  
 }
 
 /**
@@ -49,10 +59,11 @@ class HumanPlayer(val name: String, val playerId: PlayerId) extends Player {
 class ComputerPlayer(nameAdd: String, val playerId: PlayerId) extends Player {
   import scala.util.Random
   
+  val playerType = TypeHuman
   val rnd = new Random()
   val name = "Computer " + nameAdd
 
-  override def nextChoice(game: RPSMatch): Int = {
+  def nextChoice(game: RPSMatch): Int = {
     Thread.sleep(500)
     val choice = rnd.nextInt(game.variant.n) + 1
     choice

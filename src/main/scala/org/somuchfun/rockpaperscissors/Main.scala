@@ -1,7 +1,7 @@
 package org.somuchfun.rockpaperscissors
 
 import org.somuchfun.rockpaperscissors.players._
-import org.somuchfun.rockpaperscissors.ui.GamePresenter
+import org.somuchfun.rockpaperscissors.ui.MatchPresenter
 import org.somuchfun.rockpaperscissors.ui.views.impl.console.ConsoleViews.{ConsoleSelectPlayerNameView, ConsoleSelectGameTypeView, ConsoleReportView}
 
 
@@ -22,10 +22,10 @@ object Main {
       }
     }
 
-    val rpsMatch = RPSMatch(new RegularVariant, 3) // our model
+    val rpsMatch = RPSMatch(new RegularVariant, 2, players._1, players._2) // our model
     val reportView = new ConsoleReportView
     
-    val presenter = new GamePresenter( rpsMatch, reportView, players._1, players._2)
+    val presenter = new MatchPresenter(rpsMatch, reportView)
     presenter.play
   }
 }

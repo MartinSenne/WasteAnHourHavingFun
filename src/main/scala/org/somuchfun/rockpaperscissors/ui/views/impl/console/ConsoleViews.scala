@@ -34,7 +34,7 @@ object ConsoleViews {
 
   class ConsoleSelectGameTypeView extends SelectGameTypeView {
     def selectGameType(): String = {
-      val text = "Select gametype: " + types.map(x => s"{x._1}: ${x._2}").mkString(", ")
+      val text = "Select gametype: " + types.map(x => s"${x._1}: ${x._2}").mkString(", ")
       userAlternativesSelection(text, types.keySet.toSeq)
     }
   }
@@ -46,11 +46,19 @@ object ConsoleViews {
     }
   }
 
-  class ConsoleSelectMoveView extends SelectMoveView {
-    def selectMove(playerId: PlayerId, elements: Map[Int, String]): Int = {
+  class ConsolePlayerMoveView(val elements: Map[Int, String]) extends PlayerMoveView {
+    private def title(pd: PlayerDescription) : String = {
+      s"Player ${pd.playerId} (${pd.name}}"
+    }
+    
+    def selectMove(pd: PlayerDescription): Int = {
       val n = elements.size
-      val text = "Select from " + elements.map(x ⇒ s"${(x._1)}: ${x._2}").mkString(", ") + ": "
+      val text = s" ${title(pd)}: Please select from " + elements.map(x ⇒ s"${x._1}: ${x._2}").mkString(", ") + ": "
       userNumberSelection(text, 1, n)
+    }
+
+    override def showMove(pd: PlayerDescription, computerChoice: Int): Unit = {
+      println( s"{title(pd)} made choice ${elements(computerChoice)}" )
     }
   }
 }

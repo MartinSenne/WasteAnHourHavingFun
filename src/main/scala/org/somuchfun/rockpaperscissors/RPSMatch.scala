@@ -26,18 +26,28 @@ case class CompletedRound(a: Int, b: Int, result: RoundResult)
 case class Report(completedRounds: Seq[CompletedRound], isFinished: Boolean, currentStep: Int, score: Score)
 
 
+sealed trait PlayerType
+case object TypeHuman extends PlayerType
+case object TypeComputer extends PlayerType
+case class PlayerDescription(name: String, playerId: PlayerId, playerType: PlayerType)
+
 /**
   * Match API.
   */
 trait RPSMatch {
   /**
     * Perform a move by player `playerDef` in this match.
-    * @param playerDef the player
+    * @param playerId the player
     * @param step the game round we are in
     * @param choice player's choice
     * @return updates [[Report]]
     */
-  def submitMove(playerDef: PlayerId, step: Int, choice: Int) : Try[Report]
+  def submitMove(playerId: PlayerId, step: Int, choice: Int) : Try[Report]
+  
+  /** Get information on certain player. */
+  def playerInfo(playerId: PlayerId) : PlayerDescription
+  
+  def computerPlayerMove(playerId: PlayerId) : Try[Int]
 
   /** A variant: Can be Rock-Scissors-Stone or any modulo-based game. */
   def variant: Variant
@@ -48,7 +58,7 @@ trait RPSMatch {
 
 /** Factory-like companion object. */
 object RPSMatch {
-  def apply(variant: Variant, numberOfRounds : Int ) : RPSMatch = {
-    new RPSMatchImpl(new RegularVariant, 3)
+  def apply(variant: Variant, numberOfRounds : Int, playerA: Player, playerB: Player ) : RPSMatch = {
+    new RPSMatchImpl(new RegularVariant, numberOfRounds, playerA, playerB)
   }
 }

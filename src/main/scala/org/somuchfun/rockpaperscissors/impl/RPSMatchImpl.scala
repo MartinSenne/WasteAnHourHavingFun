@@ -11,7 +11,7 @@ import scala.util.{Failure, Success, Try}
   * @param variant specifies the variant to use.
   * @param rounds number of rounds to play.
   */
-class RPSMatchImpl(val variant: Variant, val rounds: Int) extends RPSMatch {
+class RPSMatchImpl(val variant: Variant, val rounds: Int, playerA: Player, playerB: Player) extends RPSMatch {
 
   // API side =================================================
   override def status : Report = state match {
@@ -35,7 +35,18 @@ class RPSMatchImpl(val variant: Variant, val rounds: Int) extends RPSMatch {
     }
   }
 
+  /** Get information on certain player. */
+  override def playerInfo(playerId: PlayerId): PlayerDescription = {
+    players(playerId).asDescription
+  }
+
+  override def computerPlayerMove(playerId: PlayerId): Try[Int] = {
+    Try { players(playerId).nextChoice(this) }
+  }
+
   // Internal =====================================================
+  val players: Map[PlayerId, Player] = Map( PlayerIdA -> playerA, PlayerIdB -> playerB)
+  
   object Validators {
     def isGameRunning: Try[(Int, Round)] = state match {
       case Running(step, round, _) => Success( (step, round) )

@@ -1,6 +1,6 @@
 package org.somuchfun.rockpaperscissors.ui.views
 
-import org.somuchfun.rockpaperscissors.{PlayerId, Report}
+import org.somuchfun.rockpaperscissors.{PlayerDescription, PlayerId, Report}
 
 object AbstractViews {
 
@@ -22,7 +22,11 @@ object AbstractViews {
     def selectGameType(): String
   }
 
-  trait SelectMoveView {
-    def selectMove(playerId: PlayerId, elements: Map[Int, String]): Int
+  trait PlayerMoveView {
+    def elements: Map[Int, String]
+    
+    def showMove(playerDescription: PlayerDescription, computerChoice: Int) : Unit
+
+    def selectMove(playerDescription: PlayerDescription): Int
   }
 }

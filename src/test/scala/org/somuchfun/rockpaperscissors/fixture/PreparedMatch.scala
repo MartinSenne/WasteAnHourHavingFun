@@ -12,7 +12,7 @@ object PreparedMatch {
   }
   
   def apply( playerA: Player, playerB: Player ) : RPSMatch = {
-    val game = RPSMatch(new RegularVariant, 3)
+    val game = RPSMatch(new RegularVariant, 3, playerA, playerB)
 
     game.submitMove(PlayerIdA, 1, 1)
     game.submitMove(PlayerIdB, 1, 3)
